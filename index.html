@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Caries Detector</title>
+</head>
+<body>
+  <h1>치아 충치 탐지</h1>
+
+  <input type="file" id="imageInput" accept="image/*">
+  <button onclick="uploadImage()">탐지</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function uploadImage() {
+      const input = document.getElementById("imageInput");
+      const resultBox = document.getElementById("result");
+
+      if (!input.files.length) {
+        resultBox.textContent = "이미지를 선택해라";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image_file", input.files[0]);
+
+      try {
+        const response = await fetch("/detect", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        resultBox.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        resultBox.textContent = "에러: " + err;
+      }
+    }
+  </script>
+</body>
+</html>

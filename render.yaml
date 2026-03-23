@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: caries-detector
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python object_detector.py
