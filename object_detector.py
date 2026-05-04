@@ -98,7 +98,7 @@ def detect():
         results = model.predict(
             source=image,
             imgsz=640,
-            conf=0.25,
+            conf=0.1,
             device="cpu",
             verbose=False
         )
