@@ -109,11 +109,18 @@ def detect():
 
         if result.boxes is not None:
             log(f"boxes detected = {len(result.boxes)}")
+
             for box in result.boxes:
                 x1, y1, x2, y2 = [round(x) for x in box.xyxy[0].tolist()]
                 class_id = int(box.cls[0].item())
                 prob = round(float(box.conf[0].item()), 4)
-                class_name = result.names[class_id]
+
+                class_name = result.names[class_id].lower().strip()
+
+                if class_name in ["caries", "cavity"]:
+                    class_name = "caries"
+                else:
+                    continue
 
                 output.append({
                     "x1": x1,
@@ -176,6 +183,7 @@ def handle_all_exceptions(e):
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     log(f"starting waitress on 0.0.0.0:{port}")
+
     serve(
         app,
         host="0.0.0.0",
